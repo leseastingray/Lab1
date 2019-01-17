@@ -15,14 +15,15 @@ namespace InvoiceTotal
     // www.murach.com
 
     public partial class frmInvoiceTotal : Form
-	{
-		public frmInvoiceTotal()
-		{
-			InitializeComponent();
-		}
+    {
+        public frmInvoiceTotal()
+        {
+            InitializeComponent();
+        }
 
         // TODO: declare class variables for array and list here
-
+        decimal[] totals = new decimal[5];
+        int index = 0;
         private void btnCalculate_Click(object sender, EventArgs e)
 		{
             try
@@ -56,7 +57,8 @@ namespace InvoiceTotal
                         txtTotal.Text = invoiceTotal.ToString();
 
                         // TODO:  Add invoice total to the array here
-
+                        totals[index] = invoiceTotal;
+                        index++;
                     }
                     else
                     {
@@ -75,7 +77,7 @@ namespace InvoiceTotal
             catch (IndexOutOfRangeException)
             {
                 MessageBox.Show(
-                    "You can only enter 3 values",
+                    "You can only enter 5 values",
                     "Entry Error");
             }
 
@@ -84,7 +86,12 @@ namespace InvoiceTotal
 
 		private void btnExit_Click(object sender, EventArgs e)
 		{
-            // TODO: add code that displays dialog boxes here
+            // TODO: add code that displays dialog boxes here (slide 166)
+            string totalsString = "";
+            foreach (decimal total in totals)
+                totalsString += total + "\n";
+            MessageBox.Show("The invoice totals are: \n" +
+                totalsString + "\n" + "Sum: " + )
 
             this.Close();
 		}

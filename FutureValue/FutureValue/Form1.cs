@@ -22,6 +22,8 @@ namespace FutureValue
         }
 
         // TODO: Declare the rectangular array and the row index here
+        string[,] future = new string[10, 4];
+        int row = 0;
 
         private void btnCalculate_Click(object sender, EventArgs e)
         {
@@ -44,6 +46,11 @@ namespace FutureValue
                     txtMonthlyInvestment.Focus();
 
                     // TODO: Add the calculation to the rectangular array here
+                    future[row, 0] = monthlyInvestment.ToString();
+                    future[row, 1] = interestRateYearly.ToString();
+                    future[row, 2] = years.ToString();
+                    future[row, 3] = futureValue.ToString("n2");
+                    row++;
                 }
             }
             catch (Exception ex)
@@ -56,7 +63,18 @@ namespace FutureValue
 
         private void btnExit_Click(object sender, EventArgs e)
         {
-            // TODO: Display the rectangular array in a dialog box here
+            // TODO: Display the rectangular array in a dialog box here (????FIX)
+            string outputString = "";
+            foreach
+            for (int r = 0; r < row; r++)
+            {
+                for (int c = 0; c < 4; c++)
+                {
+                    outputString += future + "\n";
+                }
+            }
+            MessageBox.Show(outputString, "Future Value");
+           
             this.Close();
         }
 

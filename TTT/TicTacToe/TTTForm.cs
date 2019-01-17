@@ -33,6 +33,9 @@ namespace TicTacToe
         const int COLUMN = 2;
         const int DIAGONAL = 3;
 
+        // Rectangular array to hold Xs and Os
+        private string[,] board = new string[5, 5];
+
         // This method takes a row and column as parameters and 
         // returns a reference to a label on the form in that position
         private Label GetSquare(int row, int column)
@@ -67,6 +70,13 @@ namespace TicTacToe
             }
             return true;
         }
+        // string symbol = board [row, 0];
+        // for (int col = 1; col < SIZE; col++)
+        //  {
+        //      if (symbol == EMPTY || board [row, col] != symbol)
+        //  return false;
+        // else
+        // return true;
 
         //* TODO:  finish all of these that return true
         private bool IsAnyRowWinner()
@@ -171,19 +181,22 @@ namespace TicTacToe
         // Setting the text and disabling the square will happen in the SyncArrayAndSquares method
         private void MakeComputerMove()
         {
-            Random gen = new Random();
-            int row;
-            int column;
-            Label square;
-            do
-            {
-                row = gen.Next(0, SIZE);
-                column = gen.Next(0, SIZE);
-                square = GetSquare(row, column);
-            } while (square.Text != EMPTY);
-            square.Text = COMPUTER_SYMBOL;
-            DisableSquare(square);
-        }
+            /*  Random gen = new Random();
+                int row;
+                int column;
+                Label square;
+                do
+                {
+                    row = gen.Next(0, SIZE);
+                    column = gen.Next(0, SIZE);
+                    square = GetSquare(row, column);
+                } while (square.Text != EMPTY);
+                square.Text = COMPUTER_SYMBOL;
+                DisableSquare(square);
+            } 
+            */
+            Random gen = new Random;
+
 
         // ALL OF THESE METHODS MANIPULATE THE UI AND SHOULDN'T CHANGE
         // This method takes an integer in the range 0 - 2 that represents a column
@@ -304,11 +317,21 @@ namespace TicTacToe
             }
         }
 
-        //* TODO:  Finish this method
+        //* TODO:  Finish this method CHECK!!!!
         // It should set the text property of each square in the UI to the value in the corresponding element of the array
         // and disable the squares that are not empty (you don't have to enable the others because they're enabled by default.
         private void SyncArrayAndSquares()
         {
+            for (int row = 0; row < SIZE; row++)
+            {
+                for (int col = 0; col < SIZE; col++)
+                {
+                    Label square = GetSquare(row, col);
+                    square.Text = board[row, col];
+                    if (square.Text != EMPTY)
+                        DisableAllSquares();
+                }
+            }
         }
 
         //* TODO:  modify this so that it uses the array and UI methods appropriately
@@ -317,9 +340,13 @@ namespace TicTacToe
             int winningDimension = NONE;
             int winningValue = NONE;
 
-            //Label clickedLabel = (Label)sender;
-            //clickedLabel.Text = USER_SYMBOL;
-            //DisableSquare(clickedLabel);
+                //Label clickedLabel = (Label)sender;
+                //clickedLabel.Text = USER_SYMBOL;
+                //DisableSquare(clickedLabel);
+
+                int row, col;
+                Label = clickedLabel = (Label)sender;
+                GetRowAndColumn(clickedLabel)
 
             if (IsWinner(out winningDimension, out winningValue))
             {
@@ -334,6 +361,9 @@ namespace TicTacToe
             else
             {
                 MakeComputerMove();
+
+                SyncArrayAndSquares();
+
                 if (IsWinner(out winningDimension, out winningValue))
                 {
                     HighlightWinner("The Computer", winningDimension, winningValue);
