@@ -30,6 +30,7 @@ namespace Test_Score_List
                 while (!inputFile.EndOfStream)
                 {
                     // TODO:  add the current score from the file into the list
+                    scoresList.Add(int.Parse(inputFile.ReadLine()));
                 }
 
                 // Close the file.
@@ -52,15 +53,19 @@ namespace Test_Score_List
 
         // The Average method returns the average of the values
         // in the scoresList parameter.
-        private double Average(/* TODO:  add the parameter here */)
+        private double Average(List<int> scoresList)
         {
             int total = 0;      // Accumulator
             double average;     // To hold the average
 
             // TODO:  Calculate the total of the scores.
+            foreach (int score in scoresList)
+            {
+                total += score;
+            }
 
             // Calculate the average of the scores.
-
+            average = (double)total / scoresList.Count;
             // Return the average.
             return average;
         }
@@ -100,6 +105,7 @@ namespace Test_Score_List
             int numBelowAverage;    // Number of below average scores
 
             // TODO:  Create a List to hold the scores.
+
 
             // TODO:  Read the scores from the file into the List.
 
