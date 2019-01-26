@@ -88,10 +88,12 @@ namespace InvoiceTotal
 		{
             // TODO: add code that displays dialog boxes here (slide 166)
             string totalsString = "";
+
+            Array.Sort(totals);
             foreach (decimal total in totals)
                 totalsString += total + "\n";
             MessageBox.Show("The invoice totals are: \n" +
-                totalsString + "\n" + "Sum: " + )
+                totalsString, "Order Totals");
 
             this.Close();
 		}

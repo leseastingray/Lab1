@@ -29,7 +29,7 @@ namespace Test_Score_List
                 // Read the scores into the list.
                 while (!inputFile.EndOfStream)
                 {
-                    // TODO:  add the current score from the file into the list
+                    // Add scores from file as items to the list.
                     scoresList.Add(int.Parse(inputFile.ReadLine()));
                 }
 
@@ -45,10 +45,14 @@ namespace Test_Score_List
 
         // The DisplayScores method displays the contents of the
         // scoresList parameter in the ListBox control.
-        private void DisplayScores(/* TODO:  add the parameter here */)
+        private void DisplayScores(List<int> scoresList)
         {
-            // TODO:  iterate through the list
-            // add each item from the list to the list box
+            // For each score in scores list
+            //  add as item to the list box.
+            foreach (int score in scoresList)
+            {
+                testScoresListBox.Items.Add(score);
+            }
         }
 
         // The Average method returns the average of the values
@@ -58,7 +62,8 @@ namespace Test_Score_List
             int total = 0;      // Accumulator
             double average;     // To hold the average
 
-            // TODO:  Calculate the total of the scores.
+            // for each score in scoresList
+            //  add the scores together to get the total.
             foreach (int score in scoresList)
             {
                 total += score;
@@ -66,34 +71,53 @@ namespace Test_Score_List
 
             // Calculate the average of the scores.
             average = (double)total / scoresList.Count;
+
             // Return the average.
             return average;
         }
 
         // The AboveAverage method returns the number of
         // above average scores in scoresList.
-        private int AboveAverage(/* TODO:  add the parameter here */)
+        private int AboveAverage(List<int> scoresList)
         {
             int numAbove = 0;       // Accumulator
 
-            // TODO:  Get the average score.
+            // Get the average from the scoresList.
+            double avrg = Average(scoresList);
 
-            // TODO:  Count the number of above average scores.
-
+            // for each score in scoresList
+            //  if the score is greater than the average
+            //      increment numAbove
+            foreach (int score in scoresList)
+            {
+                if (score > avrg)
+                {
+                    numAbove++;
+                }
+            }
             // Return the number of above average scores.
             return numAbove;
         }
 
         // The BelowAverage method returns the number of
         // below average scores in scoresList.
-        private int BelowAverage(/* TODO:  add the parameter here */)
+        private int BelowAverage(List<int> scoresList)
         {
             int numBelow = 0;       // Accumulator
 
-            // TODO:  Get the average score.
+            // Get the average from the scoresList.
+            double avrg = Average(scoresList);
 
-            // TODO:  Count the number of below average scores.
-
+            // for each score in scoresList
+            //  if the score is less than the average
+            //      increment numBelow
+            foreach (int score in scoresList)
+            {
+                if (score < avrg)
+                {
+                    numBelow++;
+                }
+            }
             // Return the number of below average scores.
             return numBelow;
         }
@@ -104,20 +128,28 @@ namespace Test_Score_List
             int numAboveAverage;    // Number of above average scores
             int numBelowAverage;    // Number of below average scores
 
-            // TODO:  Create a List to hold the scores.
+            // Create scoresList of int values.
+            List<int> scoresList = new List<int>();
 
+            // Call ReadScores method to read scoresList.
+            ReadScores(scoresList);
 
-            // TODO:  Read the scores from the file into the List.
+            // Call DisplayScores method to display scoresList.
+            DisplayScores(scoresList);
 
-            // TODO:  Display the scores.
-
-            // TODO:  Display the average score.
+            // Call Average method to get average score
+            // display in averageLabel as a string.
+            averageScore = Average(scoresList);
             averageLabel.Text = averageScore.ToString("n1");
 
-            // TODO:  Display the number of above average scores.
+            // Call AboveAverage method to get above average scores
+            // display in aboveAverageLabel as a string.
+            numAboveAverage = AboveAverage(scoresList);
             aboveAverageLabel.Text = numAboveAverage.ToString();
 
-            // TODO:  Display the number of below average scores.
+            // Call BelowAverage method to get below average scores
+            // display in belowAverageLabel as a string.
+            numBelowAverage = BelowAverage(scoresList);
             belowAverageLabel.Text = numBelowAverage.ToString();
         }
 

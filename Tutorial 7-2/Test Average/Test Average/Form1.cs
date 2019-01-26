@@ -125,12 +125,12 @@ namespace Test_Average
                 // Use the methods
                 highestScore = Highest(scores);
                 lowestScore = Lowest(scores);
-                Average(scores);
+                averageScore = Average(scores);
 
-                // Display the values, highest, lowest and average(do average!)
+                // Display the values, highest, lowest and average.
                 highScoreLabel.Text = highestScore.ToString();
                 lowScoreLabel.Text = lowestScore.ToString();
-
+                averageScoreLabel.Text = averageScore.ToString();
             }
             catch (Exception ex)
             {

@@ -65,15 +65,18 @@ namespace FutureValue
         {
             // TODO: Display the rectangular array in a dialog box here (????FIX)
             string outputString = "";
-            foreach
-            for (int r = 0; r < row; r++)
-            {
-                for (int c = 0; c < 4; c++)
+
+                for (int r = 0; r < row; r++)
                 {
-                    outputString += future + "\n";
+                    for (int c = 0; c < 4; c++)
+                    {
+                        outputString += future[r,c] + "\t";
+                    }
+                    outputString += "\n";
                 }
-            }
-            MessageBox.Show(outputString, "Future Value");
+
+            MessageBox.Show("Inv/Mo.\t Rate \t Years \t Future Value \n" + 
+                         outputString, "Future Value");
            
             this.Close();
         }
