@@ -45,7 +45,7 @@ namespace TicTacToe
         }
 
         // This method does the "reverse" process of GetSquare
-        // It takes a label on the form as it's parameter and
+        // It takes a label on the form as its parameter and
         // returns the row and column of that square as output parameters
         private void GetRowAndColumn(Label l, out int row, out int column)
         {
@@ -54,29 +54,20 @@ namespace TicTacToe
             column = (position - 1) % SIZE;
         }
 
-        //* TODO: Modify this so it uses the array rather than a square in the UI
-        // This method takes a row (in the range of 0 - 4) and returns true if 
-        // the row on the form contains 5 Xs or 5 Os.
+        // Modify this so it uses the array rather than a square in the UI 
+        // This method takes a row (in the range of 0 - 4) and returns true
+        // if the row on the form contains 5 Xs or 5 Os.
         // Use it as a model for writing IsColumnWinner
         private bool IsRowWinner(int row)
         {
-            Label square = GetSquare(row, 0);
-            string symbol = square.Text;
+            string symbol = board [row, 0];
             for (int col = 1; col < SIZE; col++)
             {
-                square = GetSquare(row, col);
-                if (symbol == EMPTY || square.Text != symbol)
+                if (symbol == EMPTY || board [row, col] != symbol)
                     return false;
             }
             return true;
         }
-        // string symbol = board [row, 0];
-        // for (int col = 1; col < SIZE; col++)
-        //  {
-        //      if (symbol == EMPTY || board [row, col] != symbol)
-        //  return false;
-        // else
-        // return true;
 
         //* TODO:  finish all of these that return true
         private bool IsAnyRowWinner()
@@ -86,8 +77,14 @@ namespace TicTacToe
 
         private bool IsColumnWinner(int col)
         {
-            return true;
-        }
+            string symbol = board [0, col];
+            for (int row = 1; row < SIZE; row ++)
+                {
+                    if (symbol == EMPTY || board [row,col] != symbol)
+                        return false;
+                }
+                return true;
+            }
 
         private bool IsAnyColumnWinner()
         {
@@ -96,17 +93,21 @@ namespace TicTacToe
 
         private bool IsDiagonal1Winner()
         {
+            string symbol = board [0,0];
+            for (int row = 1, col = 1; row < SIZE; row ++, col ++)
+            {
+                if (symbol == EMPTY || board [row,col] != symbol)
+                    return false;
+            }
             return true;
         }
 
         private bool IsDiagonal2Winner()
         {
-            Label square = GetSquare(0, (SIZE - 1));
-            string symbol = square.Text;
+            string symbol = board[0, SIZE - 1];
             for (int row = 1, col = SIZE - 2; row < SIZE; row++, col--)
             {
-                square = GetSquare(row, col);
-                if (symbol == EMPTY || square.Text != symbol)
+                if (symbol == EMPTY || board [row,col] != symbol)
                     return false;
             }
             return true;
@@ -119,6 +120,24 @@ namespace TicTacToe
 
         private bool IsFull()
         {
+            /* for all the rows beginning at 0 and less than SIZE increment by 1
+             *     for all the cols beginning at 0 and less than SIZE increment by 1
+             *         call GetSquare method
+             *         if text of square is empty
+             *             return false
+             * return true
+             */
+            for (int row = 0; row < SIZE; row++)
+            {
+                for (int col = 0; col < SIZE; col++)
+                {
+                    Label square = GetSquare(row, col);
+                    if (square.Text == EMPTY)
+                    {
+                        return false;
+                    }
+                }
+            }
             return true;
         }
 
@@ -128,8 +147,13 @@ namespace TicTacToe
         private bool IsWinner(out int whichDimension, out int whichOne)
         {
             // rows
+            // for row starting at 0 and less than SIZE and incremented by 1
             for (int row = 0; row < SIZE; row++)
             {
+                // if there is a winner in a row
+                //    whichDimension = ROW
+                //    whichOne = the winning row
+                //    return true
                 if (IsRowWinner(row))
                 {
                     whichDimension = ROW;
@@ -172,34 +196,7 @@ namespace TicTacToe
             return (IsFull() && !IsWinner(out winningDimension, out winningValue));
         }
 
-        //* TODO:  finish this
-        private void ResetArray()
-        {
-        }
-
-        //* TODO:  Modify this so it uses the array rather than the UI to make the move.
-        // Setting the text and disabling the square will happen in the SyncArrayAndSquares method
-        private void MakeComputerMove()
-        {
-            /*  Random gen = new Random();
-                int row;
-                int column;
-                Label square;
-                do
-                {
-                    row = gen.Next(0, SIZE);
-                    column = gen.Next(0, SIZE);
-                    square = GetSquare(row, column);
-                } while (square.Text != EMPTY);
-                square.Text = COMPUTER_SYMBOL;
-                DisableSquare(square);
-            } 
-            */
-            Random gen = new Random;
-
-
-        // ALL OF THESE METHODS MANIPULATE THE UI AND SHOULDN'T CHANGE
-        // This method takes an integer in the range 0 - 2 that represents a column
+        // This method takes an integer in the range 0 - 4 that represents a column
         // as it's parameter and changes the font color of that cell to red.
         private void HighlightColumn(int col)
         {
@@ -211,15 +208,8 @@ namespace TicTacToe
             }
         }
 
-        private void HighlightDiagonal(int whichDiagonal)
-        {
-            if (whichDiagonal == TOP_LEFT_TO_BOTTOM_RIGHT)
-                HighlightDiagonal1();
-            else
-                HighlightDiagonal2();
-
-        }
-
+        // This method changes the font color of the top right to bottom left diagonal to red
+        // I did this diagonal because it's harder than the other one
         private void HighlightDiagonal2()
         {
             for (int row = 0, col = SIZE - 1; row < SIZE; row++, col--)
@@ -230,6 +220,17 @@ namespace TicTacToe
             }
         }
 
+        // This method will highlight either diagonal, depending on the parameter that you pass
+        private void HighlightDiagonal(int whichDiagonal)
+        {
+            if (whichDiagonal == TOP_LEFT_TO_BOTTOM_RIGHT)
+                HighlightDiagonal1();
+            else
+                HighlightDiagonal2();
+
+        }
+
+        //* TODO:  finish these 2
         private void HighlightRow(int row)
         {
             for (int col = 0; col < SIZE; col++)
@@ -251,6 +252,20 @@ namespace TicTacToe
         }
 
         private void HighlightWinner(string player, int winningDimension, int winningValue)
+        /* switch based on winningDimension value
+         *     in case ROW
+         *         call HighlightRow method
+         *         display win in resultLabel text
+         *         end case
+         *     in case COLUMN
+         *         call HighlightColumn method
+         *         display win in resultLabel text
+         *         end case
+         *     in case DIAGONAL
+         *         call HighlightDiagonal method
+         *         display win in resultLabel text
+         *         end case
+         */
         {
             switch (winningDimension)
             {
@@ -270,6 +285,12 @@ namespace TicTacToe
         }
 
         private void ResetSquares()
+            /* for all the rows beginning at 0 and less than SIZE
+             *     for all the columns beginning at 0 and less than SIZE
+             *         call GetSquare(row, col) method
+             *         clear square label text
+             *         color of square label to black
+             */
         {
             for (int row = 0; row < SIZE; row++)
             {
@@ -280,6 +301,51 @@ namespace TicTacToe
                     square.ForeColor = Color.Black;
                 }
             }
+            // Clear the resultLabel
+            resultLabel.Text = EMPTY;
+            // Call EnableAllSquares() method
+            EnableAllSquares();
+        }
+        private void ResetArray()
+        {
+            // for all the rows beginning at 0 and less than SIZE
+            //    for all the cols beginning at 0 and less than SIZE
+            //        clear the label text
+            //        color of label to black
+            for (int row = 0; row < SIZE; row++)
+            {
+                for (int col = 0; col < SIZE; col++)
+                {
+                    Label square = GetSquare(row, col);
+                    square.Text = board[row, col];
+                    square.Text = EMPTY;
+                    square.ForeColor = Color.Black;
+                }
+            }
+        }
+        // Modify this so it uses the array rather than the UI to make the move.
+        // Setting the text and disabling the square will happen in the
+        // SyncArrayAndSquares method
+        private void MakeComputerMove()
+        {
+            /* random generator = new Random()
+             * int row = generator.Next(0, 3)
+             * do
+             *     row = random number btwn 0 and 4
+             *     col = random number btwn 0 and 4
+             *     square = GetSquare(row, col)
+             * while there is something in the square (row, col)
+             *  or the square is not empty
+             */
+            Random rand = new Random();
+            int row, col;
+
+            do
+            {
+                row = rand.Next(0, SIZE - 1);
+                col = rand.Next(0, SIZE - 1);
+            }
+            while (board[row, col] != EMPTY && !IsFull());
         }
 
         // Setting the enabled property changes the look and feel of the cell.
@@ -317,9 +383,10 @@ namespace TicTacToe
             }
         }
 
-        //* TODO:  Finish this method CHECK!!!!
-        // It should set the text property of each square in the UI to the value in the corresponding element of the array
-        // and disable the squares that are not empty (you don't have to enable the others because they're enabled by default.
+        // This method should set the text property of each square in the UI
+        // to the value in the corresponding element of the array and disable
+        // the squares that are not empty (you don't have to enable the others
+        // because they're enabled by default)
         private void SyncArrayAndSquares()
         {
             for (int row = 0; row < SIZE; row++)
@@ -329,34 +396,48 @@ namespace TicTacToe
                     Label square = GetSquare(row, col);
                     square.Text = board[row, col];
                     if (square.Text != EMPTY)
-                        DisableAllSquares();
+                    {
+                        DisableSquare(square);
+                    }
+                    else
+                    {
+                        square.Text = COMPUTER_SYMBOL;
+                    }
                 }
             }
         }
-
-        //* TODO:  modify this so that it uses the array and UI methods appropriately
+        //* TODO:  Modify this so it uses the array and UI methods properly
         private void label_Click(object sender, EventArgs e)
         {
             int winningDimension = NONE;
             int winningValue = NONE;
 
-                //Label clickedLabel = (Label)sender;
-                //clickedLabel.Text = USER_SYMBOL;
-                //DisableSquare(clickedLabel);
+            /* Click label
+             * Change clicked label text to USER_SYMBOL
+             * Disable clicked label
+             */
+            Label clickedLabel = (Label)sender;
+            clickedLabel.Text = USER_SYMBOL;
+            DisableSquare(clickedLabel);
 
-                int row, col;
-                Label = clickedLabel = (Label)sender;
-                GetRowAndColumn(clickedLabel)
-
+            /* If user wins on this move,
+             *     disable all squares
+             *     call HighlightWinner method
+             * Else if (IsFull()) is true
+             *     disable all squares
+             *     display "It's a tie!" in resultLabel
+             * Else
+             *     call MakeComputerMove() method
+             */
             if (IsWinner(out winningDimension, out winningValue))
             {
-                HighlightWinner("The User", winningDimension, winningValue);
-                //DisableAllSquares();
+                DisableAllSquares();
+                HighlightWinner("User", winningDimension, winningValue);
             }
             else if (IsFull())
             {
-                resultLabel.Text = "It's a Tie.";
-                //DisableAllSquares();
+                DisableAllSquares();
+                resultLabel.Text = "It's a tie!";
             }
             else
             {
@@ -364,27 +445,38 @@ namespace TicTacToe
 
                 SyncArrayAndSquares();
 
+                /* if IsWinner is true after computer move
+                 *    disable all squares
+                 *    call HighlightWinner() method
+                 * else if IsFull is true
+                 *    disable all squares
+                 *    display "It's a tie!" in resultLabel text
+                 */
                 if (IsWinner(out winningDimension, out winningValue))
                 {
-                    HighlightWinner("The Computer", winningDimension, winningValue);
-                    //DisableAllSquares();
+                    DisableAllSquares();
+                    HighlightWinner("Computer", winningDimension, winningValue);
                 }
                 else if (IsFull())
                 {
-                    resultLabel.Text = "It's a Tie.";
-                    //DisableAllSquares();
+                    resultLabel.Text = "It's a tie!";
                 }
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void newGameButton_Click(object sender, EventArgs e)
+        /* newGameButton click
+        * calls DisableAllSquares()
+        * calls ResetSquares()
+        */
         {
+            DisableAllSquares();
             ResetArray();
             ResetSquares();
             EnableAllSquares();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void exitButton_Click(object sender, EventArgs e)
         {
             Application.Exit();
         }
