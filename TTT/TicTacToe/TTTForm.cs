@@ -35,6 +35,7 @@ namespace TicTacToe
 
         // Rectangular array to hold Xs and Os
         private string[,] board = new string[5, 5];
+        
 
         // This method takes a row and column as parameters and 
         // returns a reference to a label on the form in that position
@@ -63,11 +64,12 @@ namespace TicTacToe
             string symbol = board [row, 0];
             for (int col = 1; col < SIZE; col++)
             {
-                if (symbol == EMPTY || board [row, col] != symbol)
+                if (symbol == EMPTY || board[row, col] != symbol)
                     return false;
             }
             return true;
         }
+        
 
         //* TODO:  finish all of these that return true
         private bool IsAnyRowWinner()
@@ -80,11 +82,12 @@ namespace TicTacToe
             string symbol = board [0, col];
             for (int row = 1; row < SIZE; row ++)
                 {
-                    if (symbol == EMPTY || board [row,col] != symbol)
+                    if (symbol == EMPTY || board [row, col] != symbol)
                         return false;
                 }
                 return true;
-            }
+        }
+        
 
         private bool IsAnyColumnWinner()
         {
@@ -93,7 +96,7 @@ namespace TicTacToe
 
         private bool IsDiagonal1Winner()
         {
-            string symbol = board [0,0];
+            string symbol = board [0, 0];
             for (int row = 1, col = 1; row < SIZE; row ++, col ++)
             {
                 if (symbol == EMPTY || board [row,col] != symbol)
@@ -230,7 +233,6 @@ namespace TicTacToe
 
         }
 
-        //* TODO:  finish these 2
         private void HighlightRow(int row)
         {
             for (int col = 0; col < SIZE; col++)
@@ -339,11 +341,13 @@ namespace TicTacToe
              */
             Random rand = new Random();
             int row, col;
+            Label square;
 
             do
             {
                 row = rand.Next(0, SIZE - 1);
                 col = rand.Next(0, SIZE - 1);
+                board[row, col] = COMPUTER_SYMBOL;
             }
             while (board[row, col] != EMPTY && !IsFull());
         }
@@ -398,9 +402,6 @@ namespace TicTacToe
                     if (square.Text != EMPTY)
                     {
                         DisableSquare(square);
-                    }
-                    else
-                    {
                         square.Text = COMPUTER_SYMBOL;
                     }
                 }
@@ -412,12 +413,21 @@ namespace TicTacToe
             int winningDimension = NONE;
             int winningValue = NONE;
 
+            for (int row = 0; row < SIZE; row++)
+            {
+                for (int col = 0; col < SIZE; col++)
+                {
+                    board[row, col] = USER_SYMBOL;
+                }
+            }
+
             /* Click label
              * Change clicked label text to USER_SYMBOL
              * Disable clicked label
              */
             Label clickedLabel = (Label)sender;
-            clickedLabel.Text = USER_SYMBOL;
+
+            board[x, y] = clickedLabel.Location;
             DisableSquare(clickedLabel);
 
             /* If user wins on this move,
