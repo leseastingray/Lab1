@@ -319,7 +319,6 @@ namespace TicTacToe
                 for (int col = 0; col < SIZE; col++)
                 {
                     Label square = GetSquare(row, col);
-                    square.Text = board[row, col];
                     square.Text = EMPTY;
                     square.ForeColor = Color.Black;
                 }
@@ -340,16 +339,17 @@ namespace TicTacToe
              *  or the square is not empty
              */
             Random rand = new Random();
-            int row, col;
-            Label square;
+            int row;
+            int col;
 
             do
             {
-                row = rand.Next(0, SIZE - 1);
-                col = rand.Next(0, SIZE - 1);
-                board[row, col] = COMPUTER_SYMBOL;
-            }
-            while (board[row, col] != EMPTY && !IsFull());
+                row = rand.Next(0, SIZE);
+                col = rand.Next(0, SIZE);
+            } while (board[row, col] != EMPTY);
+            board[row, col] = COMPUTER_SYMBOL;
+
+            SyncArrayAndSquares();
         }
 
         // Setting the enabled property changes the look and feel of the cell.
@@ -402,7 +402,6 @@ namespace TicTacToe
                     if (square.Text != EMPTY)
                     {
                         DisableSquare(square);
-                        square.Text = COMPUTER_SYMBOL;
                     }
                 }
             }
@@ -413,23 +412,17 @@ namespace TicTacToe
             int winningDimension = NONE;
             int winningValue = NONE;
 
-            for (int row = 0; row < SIZE; row++)
-            {
-                for (int col = 0; col < SIZE; col++)
-                {
-                    board[row, col] = USER_SYMBOL;
-                }
-            }
 
             /* Click label
              * Change clicked label text to USER_SYMBOL
              * Disable clicked label
              */
+            int row, col;
             Label clickedLabel = (Label)sender;
-
-            board[x, y] = clickedLabel.Location;
-            DisableSquare(clickedLabel);
-
+            GetRowAndColumn(clickedLabel, out row, out col);
+            board[row, col] = USER_SYMBOL;
+            SyncArrayAndSquares();
+            
             /* If user wins on this move,
              *     disable all squares
              *     call HighlightWinner method
@@ -452,7 +445,7 @@ namespace TicTacToe
             else
             {
                 MakeComputerMove();
-
+           
                 SyncArrayAndSquares();
 
                 /* if IsWinner is true after computer move
