@@ -1,0 +1,11 @@
+version: '3'
+services:
+    mono:
+        build:
+            context: ./
+            dockerfile: ./mono.dockerfile
+        environment:
+            DISPLAY: 192.168.0.202:0
+        volumes:    
+            - "/tmp/.X11-unix:/tmp/.X11-unix:rw"
+            - '.:/root/lab1'
